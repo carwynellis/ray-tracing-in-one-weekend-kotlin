@@ -53,6 +53,11 @@ class Vec3Test {
     }
 
     @Test
+    fun `times n operator should be commutative`() {
+        assertEquals(Vec3(9.0, 9.0, 9.0), 3.0 * Vec3(3.0, 3.0, 3.0))
+    }
+
+    @Test
     fun `div n operator should return a new Vec3 with each component divided by n`() {
         assertEquals(Vec3(3.0, 3.0, 3.0), Vec3(9.0, 9.0, 9.0) / 3.0)
     }
