@@ -12,6 +12,9 @@ repositories {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    testCompile "org.jetbrains.kotlin:kotlin-test"
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit5"
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.5.1'
 }
 
 compileKotlin {
@@ -24,4 +27,8 @@ compileTestKotlin {
 
 application {
     mainClassName = "uk.carwynellis.raytracing.ImageWriterKt"
+}
+
+test {
+    useJUnitPlatform()
 }

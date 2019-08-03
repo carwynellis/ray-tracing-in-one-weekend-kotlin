@@ -31,7 +31,10 @@ fun main(args: Array<String>) {
     imageWriter.close()
 }
 
-class ImageWriter(private val width: Int, private val height: Int, val filename: String) {
+/**
+ * A basic PPM image writer modelled after the Scala equivalent.
+ */
+class ImageWriter(private val width: Int, private val height: Int, private val filename: String) {
     private val writer = PrintWriter(File(filename))
 
     fun writeHeader(): Unit = writer.write("""
