@@ -62,4 +62,18 @@ class Vec3Test {
         assertEquals(Vec3(3.0, 3.0, 3.0), Vec3(9.0, 9.0, 9.0) / 3.0)
     }
 
+    @Test
+    fun `unitVector should return a new vector with a total length of 1`() {
+        assertEquals(1.0, Vec3(3.0, 3.0, 3.0).unitVector().length())
+    }
+
+    @Test
+    fun `dot should compute the dot product of two vectors`() {
+        assertEquals(Vec3(1.0, 4.0, 9.0), Vec3(1.0, 2.0, 3.0) dot Vec3(1.0, 2.0, 3.0))
+    }
+
+    @Test
+    fun `cross should compute the cross product of two vectors`() {
+        assertEquals(Vec3(-3.0, 6.0, -3.0), Vec3(1.0, 2.0, 3.0) cross Vec3(4.0, 5.0, 6.0))
+    }
 }

@@ -26,6 +26,27 @@ data class Vec3(val x: Double, val y: Double, val z: Double) {
      * Computes the vector length defined as the square root of x^2 + y^2 + z^2
      */
     fun length(): Double = sqrt(squaredLength())
+
+    /**
+     * Generates a new vector with total length 1 that maintains the direction of the original vector
+     */
+    fun unitVector(): Vec3 = this / length()
+
+    /**
+     * Computes the dot product of this vector and the specified vector.
+     */
+    infix fun dot(that: Vec3): Vec3 = Vec3(this.x * that.x, this.y * that.y, this.z * that.z)
+
+    /**
+     * Computes the cross product of this vector and the specified vector.
+     *
+     * Implementation verified with https://betterexplained.com/articles/cross-product/
+     */
+    infix fun cross(that: Vec3): Vec3 = Vec3(
+        x = (y * that.z) - (z * that.y),
+        y = -((x * that.z) - (z * that.x)),
+        z = (x * that.y) - (y * that.x)
+    )
 }
 
 // Unary operators
