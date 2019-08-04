@@ -9,13 +9,15 @@ data class Vec3(val x: Double, val y: Double, val z: Double) {
     val b: Double = z
 
     // Operator overloads for basic mathematical operators.
-    operator fun plus(that: Vec3): Vec3 =   Vec3(x + that.x, y + that.y, z + that.z)
-    operator fun minus(that: Vec3): Vec3 =  Vec3(x - that.x, y - that.y, z - that.z)
-    operator fun times(that: Vec3): Vec3 =  Vec3(x * that.x, y * that.y, z * that.z)
-    operator fun div(that: Vec3): Vec3 =    Vec3(x / that.x, y / that.y, z / that.z)
-    // Additional times and div operators that take a double.
+    operator fun plus(that: Vec3): Vec3 = Vec3(x + that.x, y + that.y, z + that.z)
+    operator fun minus(that: Vec3): Vec3 = Vec3(x - that.x, y - that.y, z - that.z)
+    operator fun times(that: Vec3): Vec3 = Vec3(x * that.x, y * that.y, z * that.z)
+    operator fun div(that: Vec3): Vec3 = Vec3(x / that.x, y / that.y, z / that.z)
+    // Additional operators that take a double
     operator fun times(n: Double) = Vec3(x * n, y * n, z * n)
-    operator fun div(n: Double) =   Vec3(x / n, y / n, z / n)
+    operator fun div(n: Double) = Vec3(x / n, y / n, z / n)
+    operator fun minus(n: Double) = Vec3(x - n, y - n, z - n)
+    operator fun plus(n: Double) = Vec3(x + n, y + n, z + n)
 
     /**
      * Computes the sum of each of the x, y, z components squared
@@ -35,7 +37,7 @@ data class Vec3(val x: Double, val y: Double, val z: Double) {
     /**
      * Computes the dot product of this vector and the specified vector.
      */
-    infix fun dot(that: Vec3): Vec3 = Vec3(this.x * that.x, this.y * that.y, this.z * that.z)
+    infix fun dot(that: Vec3): Double = (this.x * that.x) + (this.y * that.y) + (this.z * that.z)
 
     /**
      * Computes the cross product of this vector and the specified vector.

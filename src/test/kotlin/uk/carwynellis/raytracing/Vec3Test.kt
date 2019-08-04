@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import kotlin.math.sqrt
 
-// TODO - consider using matchers - something like hamkrest?
 class Vec3Test {
 
     @Test
@@ -63,13 +62,23 @@ class Vec3Test {
     }
 
     @Test
+    fun `plus n operator should return a new Vec3 with each component increased by n`() {
+        assertEquals(Vec3(3.0, 3.0, 3.0), Vec3(1.0, 1.0, 1.0) + 2.0)
+    }
+
+    @Test
+    fun `minus n operator should return a new Vec3 with each component increased by n`() {
+        assertEquals(Vec3(3.0, 3.0, 3.0), Vec3(4.0, 4.0, 4.0) - 1.0)
+    }
+
+    @Test
     fun `unitVector should return a new vector with a total length of 1`() {
         assertEquals(1.0, Vec3(3.0, 3.0, 3.0).unitVector().length())
     }
 
     @Test
     fun `dot should compute the dot product of two vectors`() {
-        assertEquals(Vec3(1.0, 4.0, 9.0), Vec3(1.0, 2.0, 3.0) dot Vec3(1.0, 2.0, 3.0))
+        assertEquals(14.0, Vec3(1.0, 2.0, 3.0) dot Vec3(1.0, 2.0, 3.0))
     }
 
     @Test
