@@ -4,8 +4,8 @@ package uk.carwynellis.raytracing
  * Main entrypoint that will render a scene and write it to a file.
  */
 fun main() {
-    val width = 200
-    val height = 100
+    val width = 800
+    val height = 400
 
     val lowerLeftCorner = Vec3(-2.0, -1.0, -1.0)
     val horizontal = Vec3(4.0, 0.0, 0.0)
@@ -38,7 +38,19 @@ fun main() {
 }
 
 fun colour(ray: Ray): Vec3 {
-    val unitDirection = ray.direction.unitVector()
-    val t = 0.5 * (unitDirection.y + 1)
-    return (1.0 - t) * Vec3(1.0, 1.0, 1.0) + t * Vec3(0.5, 0.7, 1.0)
+    return if (hitSphere(Vec3(0.0, 0.0, -1.0), 0.5, ray)) Vec3(1.0, 0.0, 0.0)
+    else {
+        val unitDirection = ray.direction.unitVector()
+        val t = 0.5 * (unitDirection.y + 1)
+        (1.0 - t) * Vec3(1.0, 1.0, 1.0) + t * Vec3(0.5, 0.7, 1.0)
+    }
+}
+
+fun hitSphere(centre: Vec3, radius: Double, r: Ray): Boolean {
+    val oc = r.origin - centre
+    val a: Double = r.direction dot r.direction
+    val b = 2.0 * oc dot r.direction
+    val c = (oc dot oc) - (radius * radius)
+    val discriminant: Double = (b * b) - (4.0 * a * c)
+    return discriminant > 0.0
 }
