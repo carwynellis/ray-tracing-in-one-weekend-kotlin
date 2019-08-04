@@ -2,7 +2,7 @@ package uk.carwynellis.raytracing
 
 import kotlin.math.sqrt
 
-class Sphere(val centre: Vec3, val radius: Double) : Hitable {
+class Sphere(private val centre: Vec3, private val radius: Double) : Hitable {
     override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
         val oc = r.origin - centre
 
