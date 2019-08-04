@@ -1,5 +1,7 @@
 package uk.carwynellis.raytracing
 
+import kotlin.math.sqrt
+
 /**
  * Main entrypoint that will render a scene and write it to a file.
  */
@@ -38,19 +40,24 @@ fun main() {
 }
 
 fun colour(ray: Ray): Vec3 {
-    return if (hitSphere(Vec3(0.0, 0.0, -1.0), 0.5, ray)) Vec3(1.0, 0.0, 0.0)
+    val t = hitSphere(Vec3(0.0, 0.0, -1.0), 0.5, ray)
+    return if (t > 0.0) {
+        val n = (ray.pointAtParameter(t) - Vec3(0.0, 0.0, -1.0)).unitVector()
+        0.5 * Vec3(n.x + 1.0, n.y + 1.0, n.z + 1.0)
+    }
     else {
         val unitDirection = ray.direction.unitVector()
-        val t = 0.5 * (unitDirection.y + 1)
-        (1.0 - t) * Vec3(1.0, 1.0, 1.0) + t * Vec3(0.5, 0.7, 1.0)
+        val u = 0.5 * (unitDirection.y + 1)
+        (1.0 - u) * Vec3(1.0, 1.0, 1.0) + u * Vec3(0.5, 0.7, 1.0)
     }
 }
 
-fun hitSphere(centre: Vec3, radius: Double, r: Ray): Boolean {
+fun hitSphere(centre: Vec3, radius: Double, r: Ray): Double {
     val oc = r.origin - centre
     val a: Double = r.direction dot r.direction
     val b = 2.0 * oc dot r.direction
     val c = (oc dot oc) - (radius * radius)
     val discriminant: Double = (b * b) - (4.0 * a * c)
-    return discriminant > 0.0
+    return if (discriminant < 0.0) -1.0
+    else (-b - sqrt(discriminant)) / (2.0 * a)
 }
