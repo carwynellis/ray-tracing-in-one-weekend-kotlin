@@ -1,41 +1,53 @@
 package uk.carwynellis.raytracing
 
+import kotlin.random.Random
+
 /**
  * Main entrypoint that will render a scene and write it to a file.
  */
+// TODO - introduce a renderer class that encapsulates most of this
 fun main() {
     val width = 800
     val height = 400
-
-    val lowerLeftCorner = Vec3(-2.0, -1.0, -1.0)
-    val horizontal = Vec3(4.0, 0.0, 0.0)
-    val vertical = Vec3(0.0, 2.0, 0.0)
-    val origin = Vec3(0.0, 0.0, 0.0)
-
-    val imageWriter = ImageWriter(width, height, "image.ppm")
-    imageWriter.writeHeader()
+    val samples = 100
 
     val world = HitableList(listOf(
         Sphere(Vec3(0.0, 0.0, -1.0), 0.5),
         Sphere(Vec3(0.0, -100.5, -1.0), 100.0)
     ))
 
+    val camera = Camera(
+        lowerLeftCorner = Vec3(-2.0, -1.0, -1.0),
+        horizontal = Vec3(4.0, 0.0, 0.0),
+        vertical = Vec3(0.0, 2.0, 0.0),
+        origin = Vec3(0.0, 0.0, 0.0)
+    )
+
+    fun samplePixel(x: Double, y: Double): Vec3 {
+        val u = (x + Random.nextDouble()) / width.toDouble()
+        val v = (y + Random.nextDouble()) / height.toDouble()
+        val ray = camera.getRay(u, v)
+        return colour(ray, world)
+    }
+
+    fun renderPixel(x: Int, y: Int): Vec3 {
+        val sum = (1..samples).map {
+            samplePixel(x.toDouble(), y.toDouble())
+        }.reduce { acc: Vec3, v: Vec3 -> acc + v }
+        return sum / samples.toDouble()
+    }
+
+    val imageWriter = ImageWriter(width, height, "image.ppm")
+
+    imageWriter.writeHeader()
+
     // Generate PPM image data
     for (j in height downTo 1) {
         for (i in 1..width) {
-            val u = i.toDouble() / width.toDouble()
-            val v = j.toDouble() / height.toDouble()
-            val ray = Ray(
-                origin = origin,
-                direction = lowerLeftCorner + (u * horizontal) + (v * vertical)
-            )
-
-            val colour = colour(ray, world)
-
-            val ir = (255 * colour.r).toInt()
-            val ig = (255 * colour.g).toInt()
-            val ib = (255 * colour.b).toInt()
-
+            val pixel = renderPixel(i, j)
+            val ir = (255 * pixel.r).toInt()
+            val ig = (255 * pixel.g).toInt()
+            val ib = (255 * pixel.b).toInt()
             imageWriter.writePixel(ir, ig, ib)
         }
     }
