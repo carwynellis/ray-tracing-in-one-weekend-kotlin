@@ -64,6 +64,11 @@ fun Vec3.gammaCorrected(): Vec3 = Vec3(
     z = sqrt(this.z)
 )
 
+
+// When rendering some rays may may include a floating point error preventing them from being treated as 0. We increase
+// the minimum value we accept slightly which yields a smoother image without visible noise.
+const val IMAGE_SMOOTHING_LIMIT = 0.0001
+
 fun colour(ray: Ray, world: Hitable): Vec3 {
     fun backgroundColour(): Vec3 {
         val unitDirection = ray.direction.unitVector()
@@ -71,7 +76,7 @@ fun colour(ray: Ray, world: Hitable): Vec3 {
         return (1.0 - u) * Vec3(1.0, 1.0, 1.0) + u * Vec3(0.5, 0.7, 1.0)
     }
 
-    val hitResult = world.hit(ray, 0.0, Double.MAX_VALUE)
+    val hitResult = world.hit(ray, IMAGE_SMOOTHING_LIMIT, Double.MAX_VALUE)
 
     return hitResult?.let {
         val target = hitResult.p + hitResult.normal + Sphere.randomPointInUnitSphere()
