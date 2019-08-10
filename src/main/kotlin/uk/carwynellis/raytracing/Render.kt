@@ -1,5 +1,6 @@
 package uk.carwynellis.raytracing
 
+import kotlin.math.sqrt
 import kotlin.random.Random
 
 /**
@@ -44,7 +45,7 @@ fun main() {
     // Generate PPM image data
     for (j in height downTo 1) {
         for (i in 1..width) {
-            val pixel = renderPixel(i, j)
+            val pixel = renderPixel(i, j).gammaCorrected()
             val ir = (255 * pixel.r).toInt()
             val ig = (255 * pixel.g).toInt()
             val ib = (255 * pixel.b).toInt()
@@ -54,6 +55,14 @@ fun main() {
 
     imageWriter.close()
 }
+
+// Apply simple gamma correction to colour values.
+// TODO - introduce separate pixel class?
+fun Vec3.gammaCorrected(): Vec3 = Vec3(
+    x = sqrt(this.x),
+    y = sqrt(this.y),
+    z = sqrt(this.z)
+)
 
 fun colour(ray: Ray, world: Hitable): Vec3 {
     fun backgroundColour(): Vec3 {

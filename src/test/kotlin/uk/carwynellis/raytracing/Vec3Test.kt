@@ -85,4 +85,9 @@ class Vec3Test {
     fun `cross should compute the cross product of two vectors`() {
         assertEquals(Vec3(-3.0, 6.0, -3.0), Vec3(1.0, 2.0, 3.0) cross Vec3(4.0, 5.0, 6.0))
     }
+
+    @Test
+    fun `gammaCorrection computes correct values`() {
+        assertEquals(Vec3(3.0, 3.0, 3.0), Vec3(9.0, 9.0, 9.0).gammaCorrected())
+    }
 }
