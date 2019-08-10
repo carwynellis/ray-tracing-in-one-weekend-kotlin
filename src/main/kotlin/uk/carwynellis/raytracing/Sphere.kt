@@ -1,6 +1,7 @@
 package uk.carwynellis.raytracing
 
 import kotlin.math.sqrt
+import kotlin.random.Random
 
 class Sphere(private val centre: Vec3, private val radius: Double) : Hitable {
     override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
@@ -35,4 +36,18 @@ class Sphere(private val centre: Vec3, private val radius: Double) : Hitable {
 
         return null
     }
+
+    companion object {
+        tailrec fun randomPointInUnitSphere(): Vec3 {
+            val randomPoint = 2.0 * Vec3(
+                x = Random.nextDouble(),
+                y = Random.nextDouble(),
+                z = Random.nextDouble()
+            )
+
+            return if (randomPoint.squaredLength() >= 1) randomPointInUnitSphere()
+            else randomPoint
+        }
+    }
 }
+

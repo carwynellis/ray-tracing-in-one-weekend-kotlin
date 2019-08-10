@@ -56,17 +56,16 @@ fun main() {
 }
 
 fun colour(ray: Ray, world: Hitable): Vec3 {
-    val hitResult = world.hit(ray, 0.0, Double.MAX_VALUE)
-    return if (hitResult != null) {
-        0.5 * Vec3(
-            x = hitResult.normal.x + 1.0,
-            y = hitResult.normal.y + 1.0,
-            z = hitResult.normal.z + 1.0
-        )
-    }
-    else {
+    fun backgroundColour(): Vec3 {
         val unitDirection = ray.direction.unitVector()
         val u = 0.5 * (unitDirection.y + 1)
-        (1.0 - u) * Vec3(1.0, 1.0, 1.0) + u * Vec3(0.5, 0.7, 1.0)
+        return (1.0 - u) * Vec3(1.0, 1.0, 1.0) + u * Vec3(0.5, 0.7, 1.0)
     }
+
+    val hitResult = world.hit(ray, 0.0, Double.MAX_VALUE)
+
+    return hitResult?.let {
+        val target = hitResult.p + hitResult.normal + Sphere.randomPointInUnitSphere()
+        0.5 * colour(Ray(hitResult.p, target - hitResult.p), world)
+    } ?: backgroundColour()
 }

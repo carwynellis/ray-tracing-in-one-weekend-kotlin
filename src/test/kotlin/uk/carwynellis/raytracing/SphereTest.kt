@@ -21,4 +21,9 @@ class SphereTest {
         val result = underTest.hit(ray, 0.0, Double.MAX_VALUE)
         assertNull(result)
     }
+
+    @Test
+    fun `randomPointInUnitSphere should return a point with squaredLength less than 1`() {
+        assert(Sphere.randomPointInUnitSphere().squaredLength() < 1)
+    }
 }
