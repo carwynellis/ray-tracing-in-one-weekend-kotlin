@@ -2,6 +2,8 @@ package uk.carwynellis.raytracing
 
 import kotlin.math.sqrt
 import kotlin.random.Random
+import uk.carwynellis.raytracing.Vec3.Operators.times
+import uk.carwynellis.raytracing.material.Lambertian
 
 /**
  * Main entrypoint that will render a scene and write it to a file.
@@ -13,8 +15,8 @@ fun main() {
     val samples = 100
 
     val world = HitableList(listOf(
-        Sphere(Vec3(0.0, 0.0, -1.0), 0.5),
-        Sphere(Vec3(0.0, -100.5, -1.0), 100.0)
+        Sphere(Vec3(0.0, 0.0, -1.0), 0.5, Lambertian(Vec3(0.5, 0.5, 0.5))),
+        Sphere(Vec3(0.0, -100.5, -1.0), 100.0, Lambertian(Vec3(0.5, 0.5, 0.5)))
     ))
 
     val camera = Camera(
@@ -28,7 +30,7 @@ fun main() {
         val u = (x + Random.nextDouble()) / width.toDouble()
         val v = (y + Random.nextDouble()) / height.toDouble()
         val ray = camera.getRay(u, v)
-        return colour(ray, world)
+        return colour(ray, world, 0)
     }
 
     fun renderPixel(x: Int, y: Int): Vec3 {
@@ -68,8 +70,11 @@ fun Vec3.gammaCorrected(): Vec3 = Vec3(
 // When rendering some rays may may include a floating point error preventing them from being treated as 0. We increase
 // the minimum value we accept slightly which yields a smoother image without visible noise.
 const val IMAGE_SMOOTHING_LIMIT = 0.0001
+// Max number of times we recurse in the colour function.
+const val MAX_RECURSION_DEPTH = 50
 
-fun colour(ray: Ray, world: Hitable): Vec3 {
+// TODO - can this be expressed as a tailrec function?
+fun colour(ray: Ray, world: Hitable, depth: Int): Vec3 {
     fun backgroundColour(): Vec3 {
         val unitDirection = ray.direction.unitVector()
         val u = 0.5 * (unitDirection.y + 1)
@@ -79,7 +84,11 @@ fun colour(ray: Ray, world: Hitable): Vec3 {
     val hitResult = world.hit(ray, IMAGE_SMOOTHING_LIMIT, Double.MAX_VALUE)
 
     return hitResult?.let {
-        val target = hitResult.p + hitResult.normal + Sphere.randomPointInUnitSphere()
-        0.5 * colour(Ray(hitResult.p, target - hitResult.p), world)
+        if (depth <  MAX_RECURSION_DEPTH) {
+            val scattered = hitResult.material.scatter(ray, hitResult)
+            hitResult.material.albedo * colour(scattered, world, depth + 1)
+        }
+        // Max recursion limit exceeded so we effectively return a no-op here.
+        else Vec3(0.0, 0.0, 0.0)
     } ?: backgroundColour()
 }

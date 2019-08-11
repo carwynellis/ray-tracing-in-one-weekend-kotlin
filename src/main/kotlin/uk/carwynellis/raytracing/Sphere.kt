@@ -2,8 +2,14 @@ package uk.carwynellis.raytracing
 
 import kotlin.math.sqrt
 import kotlin.random.Random
+import uk.carwynellis.raytracing.Vec3.Operators.times
+import uk.carwynellis.raytracing.material.Material
 
-class Sphere(private val centre: Vec3, private val radius: Double) : Hitable {
+class Sphere(
+    private val centre: Vec3,
+    private val radius: Double,
+    private val material: Material
+) : Hitable {
     override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
         val oc = r.origin - centre
 
@@ -20,7 +26,8 @@ class Sphere(private val centre: Vec3, private val radius: Double) : Hitable {
                 return HitRecord(
                     t = x,
                     p = r.pointAtParameter(x),
-                    normal = (r.pointAtParameter(x) - centre) / radius
+                    normal = (r.pointAtParameter(x) - centre) / radius,
+                    material = material
                 )
             }
 
@@ -29,7 +36,8 @@ class Sphere(private val centre: Vec3, private val radius: Double) : Hitable {
                 return HitRecord(
                     t = y,
                     p = r.pointAtParameter(y),
-                    normal = (r.pointAtParameter(y) - centre) / radius
+                    normal = (r.pointAtParameter(y) - centre) / radius,
+                    material = material
                 )
             }
         }

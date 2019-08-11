@@ -2,11 +2,12 @@ package uk.carwynellis.raytracing
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import uk.carwynellis.raytracing.material.Lambertian
 
 class HitableListTest {
     private val underTest = HitableList(listOf(
-        Sphere(Vec3(0.0, 0.0, 0.0), 1.0),
-        Sphere(Vec3(10.0, 10.0, 10.0), 1.0)
+        Sphere(Vec3(0.0, 0.0, 0.0), 1.0, Lambertian(Vec3(1.0, 1.0, 1.0))),
+        Sphere(Vec3(10.0, 10.0, 10.0), 1.0, Lambertian(Vec3(1.0, 1.0, 1.0)))
     ))
 
     @Test

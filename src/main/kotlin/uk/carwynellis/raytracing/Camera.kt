@@ -1,5 +1,7 @@
 package uk.carwynellis.raytracing
 
+import uk.carwynellis.raytracing.Vec3.Operators.times
+
 class Camera(
     private val lowerLeftCorner: Vec3,
     private val horizontal: Vec3,

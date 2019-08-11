@@ -1,5 +1,7 @@
 package uk.carwynellis.raytracing
 
+import uk.carwynellis.raytracing.Vec3.Operators.times
+
 /**
  * Class representing a ray, or line in three dimensional space defined by an origin and direction.
  */

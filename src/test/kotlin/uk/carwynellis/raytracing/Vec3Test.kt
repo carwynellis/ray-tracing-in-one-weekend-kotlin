@@ -3,6 +3,9 @@ package uk.carwynellis.raytracing
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import kotlin.math.sqrt
+import uk.carwynellis.raytracing.Vec3.Operators.times
+import uk.carwynellis.raytracing.Vec3.Operators.unaryPlus
+import uk.carwynellis.raytracing.Vec3.Operators.unaryMinus
 
 class Vec3Test {
 

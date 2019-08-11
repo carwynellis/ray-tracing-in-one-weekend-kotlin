@@ -2,9 +2,10 @@ package uk.carwynellis.raytracing
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import uk.carwynellis.raytracing.material.Lambertian
 
 class SphereTest {
-    private val underTest = Sphere(Vec3(0.0, 0.0, 0.0), 1.0)
+    private val underTest = Sphere(Vec3(0.0, 0.0, 0.0), 1.0, Lambertian(Vec3(1.0, 1.0, 1.0)))
 
     @Test
     fun `hit should return a hitRecord for a ray that intersects the sphere`() {

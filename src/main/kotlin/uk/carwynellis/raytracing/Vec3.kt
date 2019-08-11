@@ -14,10 +14,10 @@ data class Vec3(val x: Double, val y: Double, val z: Double) {
     operator fun times(that: Vec3): Vec3 = Vec3(x * that.x, y * that.y, z * that.z)
     operator fun div(that: Vec3): Vec3 = Vec3(x / that.x, y / that.y, z / that.z)
     // Additional operators that take a double
-    operator fun times(n: Double) = Vec3(x * n, y * n, z * n)
     operator fun div(n: Double) = Vec3(x / n, y / n, z / n)
     operator fun minus(n: Double) = Vec3(x - n, y - n, z - n)
     operator fun plus(n: Double) = Vec3(x + n, y + n, z + n)
+    operator fun times(n: Double): Vec3 = n * this
 
     /**
      * Computes the sum of each of the x, y, z components squared
@@ -49,11 +49,13 @@ data class Vec3(val x: Double, val y: Double, val z: Double) {
         y = -((x * that.z) - (z * that.x)),
         z = (x * that.y) - (y * that.x)
     )
+
+    // TODO - better way to do this?
+    companion object Operators {
+        // Unary operators
+        operator fun Vec3.unaryMinus() = Vec3(-x, -y, -z)
+        operator fun Vec3.unaryPlus() = this
+        // Additional times overload to support commutativity e.g. Vec3 * n = n * Vec3
+        operator fun Double.times(v: Vec3): Vec3 = Vec3(v.x * this, v.y * this, v.z * this)
+    }
 }
-
-// Unary operators
-operator fun Vec3.unaryMinus() = Vec3(-x, -y, -z)
-operator fun Vec3.unaryPlus() = this
-// Additional times overload to support commutativity e.g. Vec3 * n = n * Vec3
-operator fun Double.times(v: Vec3): Vec3 = Vec3(v.x * this, v.y * this, v.z * this)
-
