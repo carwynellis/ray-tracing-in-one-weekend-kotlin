@@ -13,13 +13,11 @@ fun main() {
     val height = 400
     val samples = 100
 
-    val scene = Scene.materialSpheres
+    val scene = Scene.positionableCameraScene
 
     val camera = Camera(
-        lowerLeftCorner = Vec3(-2.0, -1.0, -1.0),
-        horizontal = Vec3(4.0, 0.0, 0.0),
-        vertical = Vec3(0.0, 2.0, 0.0),
-        origin = Vec3(0.0, 0.0, 0.0)
+        verticalFieldOfView = 90.0,
+        aspectRatio = width.toDouble() / height.toDouble()
     )
 
     fun samplePixel(x: Double, y: Double): Vec3 {
