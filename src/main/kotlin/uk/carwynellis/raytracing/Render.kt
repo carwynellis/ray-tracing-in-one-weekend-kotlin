@@ -3,7 +3,6 @@ package uk.carwynellis.raytracing
 import kotlin.math.sqrt
 import kotlin.random.Random
 import uk.carwynellis.raytracing.Vec3.Operators.times
-import uk.carwynellis.raytracing.material.Lambertian
 
 /**
  * Main entrypoint that will render a scene and write it to a file.
@@ -14,10 +13,7 @@ fun main() {
     val height = 400
     val samples = 100
 
-    val world = HitableList(listOf(
-        Sphere(Vec3(0.0, 0.0, -1.0), 0.5, Lambertian(Vec3(0.5, 0.5, 0.5))),
-        Sphere(Vec3(0.0, -100.5, -1.0), 100.0, Lambertian(Vec3(0.5, 0.5, 0.5)))
-    ))
+    val scene = Scene.metalSpheres
 
     val camera = Camera(
         lowerLeftCorner = Vec3(-2.0, -1.0, -1.0),
@@ -30,7 +26,7 @@ fun main() {
         val u = (x + Random.nextDouble()) / width.toDouble()
         val v = (y + Random.nextDouble()) / height.toDouble()
         val ray = camera.getRay(u, v)
-        return colour(ray, world, 0)
+        return colour(ray, scene, 0)
     }
 
     fun renderPixel(x: Int, y: Int): Vec3 {
