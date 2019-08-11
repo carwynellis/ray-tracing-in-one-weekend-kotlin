@@ -15,12 +15,17 @@ fun main() {
 
     val scene = Scene.materialSpheres
 
+    val origin = Vec3(3.0, 3.0, 2.0)
+    val target = Vec3(0.0, 0.0, -1.0)
+
     val camera = Camera(
-        origin = Vec3(-2.0, 2.0, 1.0),
+        origin = Vec3(3.0, 3.0, 2.0),
         target = Vec3(0.0, 0.0, -1.0),
         upVector = Vec3(0.0, 1.0, 0.0),
-        verticalFieldOfView = 90.0,
-        aspectRatio = width.toDouble() / height.toDouble()
+        verticalFieldOfView = 20.0,
+        aspectRatio = width.toDouble() / height.toDouble(),
+        aperture = 2.0,
+        focusDistance = (origin - target).length()
     )
 
     fun samplePixel(x: Double, y: Double): Vec3 {
