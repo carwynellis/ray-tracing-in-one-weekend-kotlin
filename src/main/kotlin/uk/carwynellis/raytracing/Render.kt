@@ -9,23 +9,23 @@ import uk.carwynellis.raytracing.Vec3.Operators.times
  */
 // TODO - introduce a renderer class that encapsulates most of this
 fun main() {
-    val width = 800
-    val height = 400
+    val width = 1200
+    val height = 800
     val samples = 100
 
-    val scene = Scene.materialSpheres
+    val scene = Scene.finalScene
 
-    val origin = Vec3(3.0, 3.0, 2.0)
-    val target = Vec3(0.0, 0.0, -1.0)
+    val origin = Vec3(13.0, 2.0, 3.0)
+    val target = Vec3(0.0, 0.0, 0.0)
 
     val camera = Camera(
-        origin = Vec3(3.0, 3.0, 2.0),
-        target = Vec3(0.0, 0.0, -1.0),
+        origin = origin,
+        target = target,
         upVector = Vec3(0.0, 1.0, 0.0),
         verticalFieldOfView = 20.0,
         aspectRatio = width.toDouble() / height.toDouble(),
-        aperture = 2.0,
-        focusDistance = (origin - target).length()
+        aperture = 0.1,
+        focusDistance = 10.0
     )
 
     fun samplePixel(x: Double, y: Double): Vec3 {
