@@ -40,6 +40,8 @@ fun main() {
 
     imageWriter.writeHeader()
 
+    print("Rendering scene -   0% complete")
+
     // Generate PPM image data
     for (j in height downTo 1) {
         for (i in 1..width) {
@@ -49,9 +51,14 @@ fun main() {
             val ib = (255 * pixel.b).toInt()
             imageWriter.writePixel(ir, ig, ib)
         }
+
+        val percentComplete = ((height - j).toDouble() / (height-1).toDouble()) * 100
+        print("\rRendering scene - %3d%s complete".format(percentComplete.toInt(), "%"))
     }
 
     imageWriter.close()
+
+    println("\nFinished rendering scene")
 }
 
 // Apply simple gamma correction to colour values.
