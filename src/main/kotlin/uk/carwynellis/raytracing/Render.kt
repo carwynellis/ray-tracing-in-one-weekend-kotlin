@@ -13,7 +13,7 @@ fun main() {
     val height = 400
     val samples = 100
 
-    val scene = Scene.metalSpheres
+    val scene = Scene.materialSpheres
 
     val camera = Camera(
         lowerLeftCorner = Vec3(-2.0, -1.0, -1.0),
