@@ -11,7 +11,7 @@ import uk.carwynellis.raytracing.Vec3.Operators.times
 fun main() {
     val width = 1200
     val height = 800
-    val samples = 100
+    val samples = 10
 
     val scene = Scene.finalScene
 
