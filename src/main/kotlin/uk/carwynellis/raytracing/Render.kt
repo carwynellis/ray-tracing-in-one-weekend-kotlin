@@ -52,9 +52,9 @@ fun main() {
     for (j in height downTo 1) {
         for (i in 1..width) {
             val pixel = renderPixel(i, j).gammaCorrected()
-            val ir = (255 * pixel.r).toInt()
-            val ig = (255 * pixel.g).toInt()
-            val ib = (255 * pixel.b).toInt()
+            val ir = (255 * pixel.r()).toInt()
+            val ig = (255 * pixel.g()).toInt()
+            val ib = (255 * pixel.b()).toInt()
             imageWriter.writePixel(ir, ig, ib)
         }
 

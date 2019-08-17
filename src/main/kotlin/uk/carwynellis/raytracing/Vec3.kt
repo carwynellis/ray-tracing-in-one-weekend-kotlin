@@ -4,9 +4,9 @@ import kotlin.math.sqrt
 
 data class Vec3(val x: Double, val y: Double, val z: Double) {
     // Alias the x, y, z values since this class is also used to represent colour data.
-    val r: Double = x
-    val g: Double = y
-    val b: Double = z
+    fun r(): Double = x
+    fun g(): Double = y
+    fun b(): Double = z
 
     // Operator overloads for basic mathematical operators.
     operator fun plus(that: Vec3): Vec3 = Vec3(x + that.x, y + that.y, z + that.z)
