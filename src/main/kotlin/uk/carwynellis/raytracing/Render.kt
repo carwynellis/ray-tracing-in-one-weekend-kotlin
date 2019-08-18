@@ -1,17 +1,14 @@
 package uk.carwynellis.raytracing
 
-import kotlin.math.sqrt
-import kotlin.random.Random
 import uk.carwynellis.raytracing.Vec3.Operators.times
 
 /**
  * Main entrypoint that will render a scene and write it to a file.
  */
-// TODO - introduce a renderer class that encapsulates most of this
 fun main() {
     val width = 1200
     val height = 800
-    val samples = 10
+    val samples = 100
 
     val scene = Scene.finalScene
 
@@ -28,39 +25,21 @@ fun main() {
         focusDistance = 10.0
     )
 
+    val filename = "image.ppm"
+
     val renderer = Renderer(camera, scene, width, height, samples)
 
     print("Rendering scene -   0% complete")
 
     val imageData = renderer.renderScene()
 
-    println("Writing image...")
+    println("Writing file: $filename...")
 
-    val imageWriter = ImageWriter(width, height, "image.ppm")
-
-    imageWriter.writeHeader()
-
-    imageData.forEach {
-        // TODO - tidy this up? extension method & pixel class?
-        val pixel = it.gammaCorrected()
-        val ir = (255 * pixel.r()).toInt()
-        val ig = (255 * pixel.g()).toInt()
-        val ib = (255 * pixel.b()).toInt()
-        imageWriter.writePixel(ir, ig, ib)
-    }
-
-    imageWriter.close()
+    ImageWriter(width, height, filename).writeImageData(imageData)
 
     println("Done.")
 }
 
-// Apply simple gamma correction to colour values.
-// TODO - introduce separate pixel class?
-fun Vec3.gammaCorrected(): Vec3 = Vec3(
-    x = sqrt(this.x),
-    y = sqrt(this.y),
-    z = sqrt(this.z)
-)
 
 
 // When rendering some rays may may include a floating point error preventing them from being treated as 0. We increase
