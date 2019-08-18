@@ -1,7 +1,5 @@
 package uk.carwynellis.raytracing
 
-import uk.carwynellis.raytracing.Vec3.Operators.times
-
 /**
  * Main entrypoint that will render a scene and write it to a file.
  */
@@ -33,9 +31,9 @@ fun main() {
 
     val imageData = renderer.renderScenePar()
 
-    println("Writing file: $filename...")
+    println("\nWriting file - $filename...")
 
     ImageWriter(width, height, filename).writeImageData(imageData)
 
-    println("Done.")
+    println("Finished")
 }

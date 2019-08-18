@@ -56,7 +56,7 @@ class Renderer(private val camera: Camera,
     fun renderScene(): List<Vec3> = (height downTo 1).flatMap { j ->
         val row = (1..width).map { i -> renderPixel(i, j) }
         val percentComplete = ((height - j).toDouble() / (height-1).toDouble()) * 100
-        print("\rRendering scene - %3d%s complete".format(percentComplete.toInt(), "%"))
+        showProgress(percentComplete)
         row
     }
 
@@ -67,7 +67,16 @@ class Renderer(private val camera: Camera,
      *
      * TODO - try this using co-routines for comparison.
      */
-    fun renderScenePar(): List<Vec3> = (height downTo 1).toList().parallelStream().map { j ->
-        (1..width).map { i -> renderPixel(i, j) }
-    }.toList().flatten()
+    fun renderScenePar(): List<Vec3> {
+        var pos = 0
+        return (height downTo 1).toList().parallelStream().map { j ->
+            val row = (1..width).map { i -> renderPixel(i, j) }
+            val percentComplete = (pos++.toDouble() / (height-1).toDouble()) * 100
+            showProgress(percentComplete)
+            row
+        }.toList().flatten()
+    }
+
+    private fun showProgress(percentComplete: Double) =
+        print("\rRendering scene - %3d%s complete".format(percentComplete.toInt(), "%"))
 }
