@@ -42,29 +42,37 @@ fun main() {
         return sum / samples.toDouble()
     }
 
+    fun renderScene(): List<Vec3> {
+        return (height downTo 1).flatMap { j ->
+            val row = (1..width).map { i -> renderPixel(i, j) }
+            val percentComplete = ((height - j).toDouble() / (height-1).toDouble()) * 100
+            print("\rRendering scene - %3d%s complete".format(percentComplete.toInt(), "%"))
+            row
+        }
+    }
+
+    print("Rendering scene -   0% complete")
+
+    val imageData = renderScene()
+
+    println("Writing image...")
+
     val imageWriter = ImageWriter(width, height, "image.ppm")
 
     imageWriter.writeHeader()
 
-    print("Rendering scene -   0% complete")
-
-    // Generate PPM image data
-    for (j in height downTo 1) {
-        for (i in 1..width) {
-            val pixel = renderPixel(i, j).gammaCorrected()
-            val ir = (255 * pixel.r()).toInt()
-            val ig = (255 * pixel.g()).toInt()
-            val ib = (255 * pixel.b()).toInt()
-            imageWriter.writePixel(ir, ig, ib)
-        }
-
-        val percentComplete = ((height - j).toDouble() / (height-1).toDouble()) * 100
-        print("\rRendering scene - %3d%s complete".format(percentComplete.toInt(), "%"))
+    imageData.forEach {
+        // TODO - tidy this up? extension method & pixel class?
+        val pixel = it.gammaCorrected()
+        val ir = (255 * pixel.r()).toInt()
+        val ig = (255 * pixel.g()).toInt()
+        val ib = (255 * pixel.b()).toInt()
+        imageWriter.writePixel(ir, ig, ib)
     }
 
     imageWriter.close()
 
-    println("\nFinished rendering scene")
+    println("Done.")
 }
 
 // Apply simple gamma correction to colour values.
