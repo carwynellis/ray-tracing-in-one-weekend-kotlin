@@ -3,6 +3,7 @@ package uk.carwynellis.raytracing
 import uk.carwynellis.raytracing.Vec3.Operators.times
 import kotlin.random.Random
 import kotlin.streams.toList
+import kotlinx.coroutines.*
 
 class Renderer(private val camera: Camera,
                private val scene: Hitable,
@@ -63,9 +64,7 @@ class Renderer(private val camera: Camera,
     /**
      * Parallelized renderer using a parallelStream.
      *
-     * This is quite lazy but probably good enough here.
-     *
-     * TODO - try this using co-routines for comparison.
+     * This is probably good enough for this application.
      */
     fun renderScenePar(): List<Vec3> {
         var pos = 0
@@ -75,6 +74,25 @@ class Renderer(private val camera: Camera,
             showProgress(percentComplete)
             row
         }.toList().flatten()
+    }
+
+    /**
+     * An alternative parallel implementation that uses co-routines.
+     *
+     * Each row is parcelled up into an async job which is then executed in parallel.
+     *
+     * awaitAll is used on the resulting list of Deferred results to block until all jobs have completed.
+     */
+    fun renderSceneParCoroutines(): List<Vec3> = runBlocking {
+        var pos = 0
+        (height downTo 1).map { j ->
+            async(Dispatchers.Default) {
+                val row = (1..width).map { i -> renderPixel(i, j) }
+                val percentComplete = (pos++.toDouble() / (height-1).toDouble()) * 100
+                showProgress(percentComplete)
+                row
+            }
+        }.awaitAll().flatten()
     }
 
     private fun showProgress(percentComplete: Double) =
