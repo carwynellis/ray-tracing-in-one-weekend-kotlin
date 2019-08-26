@@ -29,7 +29,6 @@ fun main() {
 
     print("Rendering scene -   0% complete")
 
-//    val imageData = renderer.renderScenePar()
     val imageData = renderer.renderSceneParCoroutines()
 
     println("\nWriting file - $filename...")

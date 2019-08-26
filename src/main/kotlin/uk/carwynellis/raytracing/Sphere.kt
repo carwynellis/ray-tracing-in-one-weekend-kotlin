@@ -18,9 +18,10 @@ class Sphere(
         val c = oc.dot(oc) - (radius * radius)
 
         val discriminant = (b * b) - (a * c)
-        val discriminantRoot = sqrt(discriminant)
 
         if (discriminant > 0) {
+            val discriminantRoot = sqrt(discriminant)
+
             val x = (-b - discriminantRoot) / a
             if (x < tMax && x > tMin) {
                 return HitRecord(

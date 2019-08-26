@@ -14,7 +14,7 @@ class Renderer(private val camera: Camera,
     // When rendering some rays may may include a floating point error preventing them from being treated as 0. We
     // increase the minimum value we accept slightly which yields a smoother image without visible noise.
     private val imageSmoothingLimit = 0.0001
-    // Max number of times we recurse in the colour function.
+    // Max number of times we can bounce a ray off objects in the colour function.
     private val maxRecursionDepth = 50
 
     // Generates a gradated background colour where no object has been 'hit' by a ray.
@@ -24,24 +24,29 @@ class Renderer(private val camera: Camera,
         return (1.0 - u) * Vec3(1.0, 1.0, 1.0) + u * Vec3(0.5, 0.7, 1.0)
     }
 
-    private fun colour(ray: Ray, world: Hitable, depth: Int): Vec3 {
+    /**
+     * Renders a pixel for a given ray.
+     *
+     * If the ray hits an object, it is bounced in random directions until no further objects are hit, or the maximum
+     * allowed number of recursions has been reached.
+     *
+     * This implementation is tail recursive and thus, stack safe.
+     */
+    private tailrec fun colour(ray: Ray, world: Hitable, accumulator: Vec3 = backgroundColour(ray), depth: Int = 0): Vec3 {
         val hitResult = world.hit(ray, imageSmoothingLimit, Double.MAX_VALUE)
 
-        return hitResult?.let {
-            if (depth <  maxRecursionDepth) {
-                val scattered = hitResult.material.scatter(ray, hitResult)
-                hitResult.material.albedo * colour(scattered, world, depth + 1)
-            }
-            // Max recursion limit exceeded so we effectively return a no-op here.
-            else Vec3(0.0, 0.0, 0.0)
-        } ?: backgroundColour(ray)
+        return if ((hitResult != null) && (depth < maxRecursionDepth)) {
+            val scattered = hitResult.material.scatter(ray, hitResult)
+            colour(scattered, world, hitResult.material.albedo * accumulator, depth + 1)
+        }
+        else accumulator
     }
 
     private fun samplePixel(x: Double, y: Double): Vec3 {
         val u = (x + Random.nextDouble()) / width.toDouble()
         val v = (y + Random.nextDouble()) / height.toDouble()
         val ray = camera.getRay(u, v)
-        return colour(ray, scene, 0)
+        return colour(ray, scene)
     }
 
     private fun renderPixel(x: Int, y: Int): Vec3 {
@@ -64,7 +69,8 @@ class Renderer(private val camera: Camera,
     /**
      * Parallelized renderer using a parallelStream.
      *
-     * This is probably good enough for this application.
+     * Note - this approach seems to come with more overhead than using co-routines, so the co-routine renderer is
+     *        actually faster than this method.
      */
     fun renderScenePar(): List<Vec3> {
         var pos = 0
