@@ -1,7 +1,7 @@
 package uk.carwynellis.raytracing
 
 /**
- * Main entrypoint that will render a scene and write it to a file.
+ * Main entrypoint that will render a scene and write the rendered image to a file.
  */
 fun main() {
     val width = 1200

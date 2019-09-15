@@ -1,5 +1,8 @@
-package uk.carwynellis.raytracing
+package uk.carwynellis.raytracing.hitable
 
+import uk.carwynellis.raytracing.HitRecord
+import uk.carwynellis.raytracing.Ray
+import uk.carwynellis.raytracing.Vec3
 import kotlin.math.sqrt
 import kotlin.random.Random
 import uk.carwynellis.raytracing.Vec3.Operators.times

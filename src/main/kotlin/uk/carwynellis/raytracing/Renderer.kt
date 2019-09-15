@@ -4,6 +4,7 @@ import uk.carwynellis.raytracing.Vec3.Operators.times
 import kotlin.random.Random
 import kotlin.streams.toList
 import kotlinx.coroutines.*
+import uk.carwynellis.raytracing.hitable.Hitable
 
 class Renderer(private val camera: Camera,
                private val scene: Hitable,

@@ -1,5 +1,7 @@
 package uk.carwynellis.raytracing
 
+import uk.carwynellis.raytracing.hitable.HitableList
+import uk.carwynellis.raytracing.hitable.Sphere
 import uk.carwynellis.raytracing.material.Dielectric
 import uk.carwynellis.raytracing.material.Lambertian
 import uk.carwynellis.raytracing.material.Metal
@@ -8,24 +10,30 @@ import kotlin.math.cos
 import kotlin.random.Random
 
 object Scene {
-    val twoGreySpheres = HitableList(listOf(
-        Sphere(Vec3(0.0, 0.0, -1.0), 0.5, Lambertian(Vec3(0.5, 0.5, 0.5))),
-        Sphere(Vec3(0.0, -100.5, -1.0), 100.0, Lambertian(Vec3(0.5, 0.5, 0.5)))
-    ))
+    val twoGreySpheres = HitableList(
+        listOf(
+            Sphere(Vec3(0.0, 0.0, -1.0), 0.5, Lambertian(Vec3(0.5, 0.5, 0.5))),
+            Sphere(Vec3(0.0, -100.5, -1.0), 100.0, Lambertian(Vec3(0.5, 0.5, 0.5)))
+        )
+    )
 
-    val materialSpheres = HitableList(listOf(
-        Sphere(Vec3(0.0, 0.0, -1.0), 0.5, Lambertian(Vec3(0.1, 0.2, 0.5))),
-        Sphere(Vec3(0.0, -100.5, -1.0), 100.0, Lambertian(Vec3(0.8, 0.8, 0.0))),
-        Sphere(Vec3(1.0, 0.0, -1.0), 0.5, Metal(Vec3(0.8, 0.6, 0.2), 0.3)),
-        Sphere(Vec3(-1.0, 0.0, -1.0), 0.5, Dielectric(1.5))
-    ))
+    val materialSpheres = HitableList(
+        listOf(
+            Sphere(Vec3(0.0, 0.0, -1.0), 0.5, Lambertian(Vec3(0.1, 0.2, 0.5))),
+            Sphere(Vec3(0.0, -100.5, -1.0), 100.0, Lambertian(Vec3(0.8, 0.8, 0.0))),
+            Sphere(Vec3(1.0, 0.0, -1.0), 0.5, Metal(Vec3(0.8, 0.6, 0.2), 0.3)),
+            Sphere(Vec3(-1.0, 0.0, -1.0), 0.5, Dielectric(1.5))
+        )
+    )
 
     val positionableCameraScene by lazy {
         val r = cos(PI / 4.0)
-        HitableList(listOf(
-            Sphere(Vec3(-r, 0.0, -1.0), r, Lambertian(Vec3(0.0, 0.0, 1.0))),
-            Sphere(Vec3(r, 0.0, -1.0), r, Lambertian(Vec3(1.0, 0.0, 0.0)))
-        ))
+        HitableList(
+            listOf(
+                Sphere(Vec3(-r, 0.0, -1.0), r, Lambertian(Vec3(0.0, 0.0, 1.0))),
+                Sphere(Vec3(r, 0.0, -1.0), r, Lambertian(Vec3(1.0, 0.0, 0.0)))
+            )
+        )
     }
 
     val finalScene by lazy {
@@ -37,13 +45,19 @@ object Scene {
         // TODO - refactor - this is a rough port of the C++ code
         fun generateSphere(c: Vec3, m: Double): Sphere? = if ((c - Vec3(4.0, 0.2, 0.0)).length() > 0.9) {
             when {
-                m < 0.8 -> Sphere(c, 0.2, Lambertian(Vec3(Random.nextDouble(), Random.nextDouble(), Random.nextDouble())))
+                m < 0.8 -> Sphere(
+                    c,
+                    0.2,
+                    Lambertian(Vec3(Random.nextDouble(), Random.nextDouble(), Random.nextDouble()))
+                )
                 m < 0.95 -> {
                     fun randomColor() = 0.5 * (1 + Random.nextDouble())
-                    Sphere(c, 0.2, Metal(
-                        Vec3(randomColor(), randomColor(), randomColor()),
-                        0.5 * Random.nextDouble()
-                    ))
+                    Sphere(
+                        c, 0.2, Metal(
+                            Vec3(randomColor(), randomColor(), randomColor()),
+                            0.5 * Random.nextDouble()
+                        )
+                    )
                 }
                 else -> Sphere(c, 0.2, Dielectric(1.5))
             }

@@ -1,6 +1,10 @@
-package uk.carwynellis.raytracing
+package uk.carwynellis.raytracing.hitable
 
-class HitableList(private val hitables: List<Hitable>) : Hitable {
+import uk.carwynellis.raytracing.HitRecord
+import uk.carwynellis.raytracing.Ray
+
+class HitableList(private val hitables: List<Hitable>) :
+    Hitable {
 
     override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? =
         hitables.fold<Hitable, HitRecord?>(null, { acc: HitRecord?, h: Hitable ->
