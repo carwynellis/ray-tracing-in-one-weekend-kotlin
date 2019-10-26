@@ -6,9 +6,9 @@ package uk.carwynellis.raytracing
 fun main() {
     val width = 1200
     val height = 800
-    val samples = 100
+    val samples = 10
 
-    val scene = Scene.finalScene
+    val scene = Scene.torusScene
 
     val origin = Vec3(13.0, 2.0, 3.0)
     val target = Vec3(0.0, 0.0, 0.0)
