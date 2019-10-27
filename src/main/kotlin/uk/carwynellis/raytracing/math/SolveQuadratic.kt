@@ -18,7 +18,6 @@ object SolveQuadratic {
      *
      */
     operator fun invoke(a: Double, b: Double, c: Double): List<Double> {
-
         // Normal form - x^2 + px + q = 0
         val p = b / (2 * c)
         val q = a / c
