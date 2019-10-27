@@ -10,8 +10,7 @@ import kotlin.math.sqrt
 object SolveQuadratic {
 
     /**
-     * Takes 3 coefficients and returns a list of possible solutions, where an empty list indicates no solutions were
-     * found.
+     * Takes 3 coefficients and returns a list of real roots, where an empty list indicates no real roots were found.
      *
      * The coefficients are specified as follows
      *
