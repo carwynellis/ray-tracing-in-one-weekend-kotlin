@@ -30,13 +30,15 @@ class Torus(
         //  K = 2(D.E)
         //  L = |D|^2 + (A^2 - B^2)
 
+        val oc = r.origin - centre
+
         // Firstly compute the factors above
         val G = 4.0 * (innerRadius * innerRadius) * ((r.direction.x * r.direction.x) + (r.direction.y * r.direction.y))
-        val H = 8.0 * (innerRadius * innerRadius) * ((r.direction.x * r.origin.x) + (r.direction.y * r.origin.y))
-        val I = 4.0 * (innerRadius * innerRadius) * ((r.origin.x * r.origin.x) + (r.origin.y * r.origin.y))
+        val H = 8.0 * (innerRadius * innerRadius) * ((r.direction.x * oc.x) + (r.direction.y * oc.y))
+        val I = 4.0 * (innerRadius * innerRadius) * ((oc.x * oc.x) + (oc.y * oc.y))
         val J = r.direction.squaredLength()
-        val K = 2 * (r.origin dot r.direction)
-        val L = r.origin.squaredLength() + ((innerRadius * innerRadius) - (crossSectionRadius * crossSectionRadius))
+        val K = 2 * (oc dot r.direction)
+        val L = oc.squaredLength() + ((innerRadius * innerRadius) - (crossSectionRadius * crossSectionRadius))
 
         // Solve the quartic by specifying the coefficients as above
         val roots = SolveQuartic(
