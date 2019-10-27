@@ -14,8 +14,6 @@ class Torus(
     private val material: Material
 ) : Hitable {
 
-    private val radius = innerRadius
-
     override fun hit(r: Ray, tMin: Double, tMax: Double): HitRecord? {
 
         // From http://www.cosinekitty.com/raytrace
@@ -36,14 +34,14 @@ class Torus(
         val G = 4.0 * (innerRadius * innerRadius) * ((r.direction.x * r.direction.x) + (r.direction.y * r.direction.y))
         val H = 8.0 * (innerRadius * innerRadius) * ((r.direction.x * r.origin.x) + (r.direction.y * r.origin.y))
         val I = 4.0 * (innerRadius * innerRadius) * ((r.origin.x * r.origin.x) + (r.origin.y * r.origin.y))
-        val J = r.direction.length() * r.direction.length()
+        val J = r.direction.squaredLength()
         val K = 2 * (r.origin dot r.direction)
-        val L = (r.origin.length() * r.origin.length()) + ((innerRadius * innerRadius) - (crossSectionRadius * crossSectionRadius))
+        val L = r.origin.squaredLength() + ((innerRadius * innerRadius) - (crossSectionRadius * crossSectionRadius))
 
         // Solve the quartic by specifying the coefficients as above
         val roots = SolveQuartic(
             a = (L * L) - I,
-            b = 2.0 * ((K * L) - H),
+            b = (2.0 * (K * L)) - H,
             c = (2.0 * J * L) + (K * K) - G,
             d = 2.0 * J * K,
             e = J * J
@@ -54,12 +52,12 @@ class Torus(
 
         return if (validRoots.size > 0) {
             // TODO - how to determine closest hit
-            val t = validRoots.first()
+            val t = validRoots.min()!!
             HitRecord(
                 t = t,
                 p = r.pointAtParameter(t),
                 // TODO - this normal is for a sphere so needs fixing....
-                normal = (r.pointAtParameter(t) - centre) / innerRadius,
+                 normal = (r.pointAtParameter(t) - centre) / innerRadius,
                 material = material
             )
         }
