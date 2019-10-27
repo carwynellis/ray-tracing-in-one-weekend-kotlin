@@ -43,9 +43,9 @@ object Scene {
                Sphere(Vec3(0.0, -1000.0, 0.0), 1000.0, Lambertian(Vec3(0.3, 0.5, 0.3))),
                Sphere(Vec3(0.0, 1.0, 2.0), 1.0, Metal(Vec3(1.0, 0.9, 0.8), 0.1)),
                Torus(
-                   centre = Vec3(4.0, 1.0, 0.8),
+                   centre = Vec3(4.0, 1.0, 1.0),
                    innerRadius = 1.0,
-                   crossSectionRadius = 10.0,
+                   crossSectionRadius = 0.5,
                    material = Lambertian(Vec3(1.0, 0.0, 1.0))
                )
            )
