@@ -52,14 +52,31 @@ class Torus(
         // Assuming that the roots must be > tMin and < tMax
         val validRoots = roots.filter { it > tMin && it < tMax }
 
-        return if (validRoots.size > 0) {
-            // TODO - how to determine closest hit
+        return if (validRoots.isNotEmpty()) {
             val t = validRoots.min()!!
+            // Compute surface normal
+            val point = r.pointAtParameter(t)
+
+            val alpha = innerRadius / ( (point.x * point.x) + (point.y * point.y))
+            val normal = Vec3(
+                x = (1 - alpha) * point.x,
+                y = (1 - alpha) * point.y,
+                z = point.z
+            ).unitVector()
+
+            // Alternate calculation 1
+//            val squareRadiiSum = (innerRadius * innerRadius) + (crossSectionRadius * crossSectionRadius)
+//            val squaredLength = point.squaredLength()
+//            val normal = Vec3(
+//                x = 4.0 * point.x * (squaredLength - squareRadiiSum),
+//                y = 4.0 * point.y * (squaredLength - squareRadiiSum + 2.0 * innerRadius * innerRadius),
+//                z = 4.0 * point.z * (squaredLength - squareRadiiSum)
+//            )
+
             HitRecord(
                 t = t,
-                p = r.pointAtParameter(t),
-                // TODO - this normal is for a sphere so needs fixing....
-                 normal = (r.pointAtParameter(t) - centre) / innerRadius,
+                p = point,
+                normal = normal.unitVector(),
                 material = material
             )
         }

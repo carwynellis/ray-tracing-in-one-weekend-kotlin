@@ -47,7 +47,8 @@ object Scene {
                    centre = Vec3(2.0, 1.5, -1.0),
                    innerRadius = 1.0,
                    crossSectionRadius = 0.5,
-                   material = Lambertian(Vec3(1.0, 0.0, 1.0))
+//                   material = Lambertian(Vec3(1.0, 0.0, 1.0))
+                   material = Metal(Vec3(0.8, 0.8, 0.8), 0.1)
                )
            )
        )
