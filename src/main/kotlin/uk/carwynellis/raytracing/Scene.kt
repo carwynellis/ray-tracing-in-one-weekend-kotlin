@@ -49,7 +49,14 @@ object Scene {
                    crossSectionRadius = 0.5,
                    material = Lambertian(Vec3(0.5, 1.0, 1.0))
 //                   material = Metal(Vec3(0.8, 0.8, 0.8), 0.1)
-               )
+               ),
+            Torus(
+                centre = Vec3(4.0, 0.2, 1.0),
+                innerRadius = 1.0,
+                crossSectionRadius = 0.4,
+                   material = Dielectric(1.5)
+//                material = Lambertian(Vec3(0.0, 0.0, 0.8))
+            )
            )
        )
     }
