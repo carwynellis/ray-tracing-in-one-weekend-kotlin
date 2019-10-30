@@ -6,7 +6,7 @@ package uk.carwynellis.raytracing
 fun main() {
     val width = 1200
     val height = 800
-    val samples = 10
+    val samples = 100
 
     val scene = Scene.torusScene
 

@@ -55,23 +55,14 @@ class Torus(
         return if (validRoots.isNotEmpty()) {
             val t = validRoots.min()!!
             // Compute surface normal
+            // TODO - There are a number of approaches to computing the normal. The following produces the most
+            // plausible results I've seen yet of the various approaches, although I'm not convinced it's completely
+            // correct.
             val point = r.pointAtParameter(t)
 
-            val alpha = innerRadius / ( (point.x * point.x) + (point.y * point.y))
-            val normal = Vec3(
-                x = (1 - alpha) * point.x,
-                y = (1 - alpha) * point.y,
-                z = point.z
-            ).unitVector()
-
-            // Alternate calculation 1
-//            val squareRadiiSum = (innerRadius * innerRadius) + (crossSectionRadius * crossSectionRadius)
-//            val squaredLength = point.squaredLength()
-//            val normal = Vec3(
-//                x = 4.0 * point.x * (squaredLength - squareRadiiSum),
-//                y = 4.0 * point.y * (squaredLength - squareRadiiSum + 2.0 * innerRadius * innerRadius),
-//                z = 4.0 * point.z * (squaredLength - squareRadiiSum)
-//            )
+            val centreToPoint = point - centre
+            val directionUnitVector = centreToPoint.unitVector()
+            val normal = point - centre + directionUnitVector * (innerRadius + crossSectionRadius)
 
             HitRecord(
                 t = t,
